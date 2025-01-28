@@ -1,0 +1,58 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: ./backend
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - 3000:3000
+    # depends_on:
+    #   - db
+    # networks:
+    #   - microservice
+  # mysql:
+  #   container_name: mysql_container
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     MYSQL_DATABASE: my_database
+  #     MYSQL_USER: my_user
+  #     MYSQL_PASSWORD: my_password
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+
+  # postgresql:
+  #   container_name: postgres_container
+  #   image: postgres:17
+  #   environment:
+  #     POSTGRES_USER: my_user
+  #     POSTGRES_PASSWORD: my_password
+  #     POSTGRES_DB: my_database
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+  # clickhouse:
+  #   container_name: clickhouse_container
+  #   image: clickhouse/clickhouse-server:23.8
+  #   ports:
+  #     - "8123:8123"
+  #     - "9000:9000"
+  #   volumes:
+  #     - clickhouse_data:/var/lib/clickhouse
+
+# networks:
+#   microservice:
+#     driver: bridge
+#     external: true
+
+# volumes:
+#   mysql_data:
+#   postgres_data:
+#   clickhouse_data:
