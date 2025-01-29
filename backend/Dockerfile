@@ -11,4 +11,4 @@ COPY . .
 RUN npm i
 RUN npm install -g nodemon
 
-ENTRYPOINT [ "nodemon", "./src/app.ts" ]
+ENTRYPOINT [ "nodemon", "--legacy-watch", "src/app.ts" ]

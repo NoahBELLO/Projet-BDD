@@ -1,0 +1,52 @@
+services:
+  mysql:
+    container_name: mysql_container
+    image: mysql:8.0
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MySql_Root_Password}
+      MYSQL_DATABASE: ${MySql_Database}
+      MYSQL_USER: ${MySql_User}
+      MYSQL_PASSWORD: ${MySql_Password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - reaseau_projet
+
+  api:
+    container_name: api
+    build:
+      context: ../backend
+    env_file:
+      - ../backend/.env
+    volumes:
+      - ../backend:/usr/src/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
+    networks:
+      - reaseau_projet
+
+  # clickhouse:
+  #   container_name: clickhouse_container
+  #   image: clickhouse/clickhouse-server:23.8
+  #   ports:
+  #     - "8123:8123"
+  #     - "9000:9000"
+  #   volumes:
+  #     - clickhouse_data:/var/lib/clickhouse
+
+  # Pour créer un network : docker network create "nom_du_reseau"
+networks:
+  reaseau_projet:
+    driver: bridge
+    external: true
+
+volumes:
+  mysql_data:
+    #   postgres_data:
+    #   clickhouse_data:
