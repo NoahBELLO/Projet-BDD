@@ -1,7 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import Routes from "./routes";
-import Controllers from "./controllers";
+import Routes from "./routes/api_oltp.route";
+import Controllers from "./controllers/api_oltp.controller";
 import 'dotenv/config';
 // import { db } from './databases';
 
