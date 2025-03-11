@@ -1,20 +1,18 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import Routes from "./routes";
-import Controllers from "./controllers";
+import Routes from "./route/routes";
+import Controllers from "./controller/controllers";
 import 'dotenv/config';
-// import { db } from './databases';
 
 dotenv.config();
+
 const app: Application = express();
-const port: number = 3000;
+const port: number = parseInt(process.env.Api_Port as string);
 
 const controllers: Controllers = new Controllers();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// db()
-app.use("/api", Routes);
+app.use("/apiClickHouse", Routes);
 
 // Middleware pour gérer les erreurs 500 (erreurs serveur)
 app.use(
@@ -26,5 +24,6 @@ app.use(
 
 // Démarrer le serveur
 app.listen(port, (): void => {
-  console.log(`API en cours d'exécution sur http://localhost:${port}`);
+  console.log(`API en cours d'exécution sur http://localhost:${port} (pour tester avec Postman)`);
+  console.log(`API en cours d'exécution sur http://api_olap:${port} (pour utilisation dans le network Docker)`);
 });

@@ -1,0 +1,5 @@
+environnement/.env
+backend/apiPostgreSql/node_modules/
+backend/apiPostgreSql/environnements/.env
+backend/apiClickHouse/node_modules/
+backend/apiClickHouse/environnements/.env

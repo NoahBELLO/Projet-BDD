@@ -1,44 +1,70 @@
 services:
-  mysql:
-    container_name: mysql_container
-    image: mysql:8.0
+  postgresql:
+    container_name: bdd_oltp
+    image: postgres:17
     env_file:
       - .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MySql_Root_Password}
-      MYSQL_DATABASE: ${MySql_Database}
-      MYSQL_USER: ${MySql_User}
-      MYSQL_PASSWORD: ${MySql_Password}
+      POSTGRES_USER: ${PostgreSql_User}
+      POSTGRES_PASSWORD: ${PostgreSql_Password}
+      POSTGRES_DB: ${PostgreSql_Database}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - reaseau_projet
 
-  api:
-    container_name: api
-    build:
-      context: ../backend
+  clickhouse:
+    container_name: bdd_olap
+    image: clickhouse/clickhouse-server:23.8
     env_file:
-      - ../backend/.env
-    volumes:
-      - ../backend:/usr/src/app
+      - .env
+    environment: 
+      CLICKHOUSE_USER: ${ClickHouse_User} 
+      CLICKHOUSE_PASSWORD: ${ClickHouse_Password}  
+      CLICKHOUSE_DB: ${ClickHouse_Database}
+      CLICKHOUSE_DEFAULT_DB: ${ClickHouse_Database}
+    restart: unless-stopped
     ports:
-      - 3000:3000
-    depends_on:
-      - mysql
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
     networks:
       - reaseau_projet
 
-  # clickhouse:
-  #   container_name: clickhouse_container
-  #   image: clickhouse/clickhouse-server:23.8
-  #   ports:
-  #     - "8123:8123"
-  #     - "9000:9000"
-  #   volumes:
-  #     - clickhouse_data:/var/lib/clickhouse
+  api_oltp:
+    container_name: api_oltp
+    build:
+      context: ../backend/apiPostgreSql
+    env_file:
+      - ../backend/apiPostgreSql/environnements/.env
+    volumes:
+      - ../backend/apiPostgreSql:/usr/src/app
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgresql
+    networks:
+      - reaseau_projet
+    command: [ "sh", "./install.sh", "bdd_oltp" ]
+
+  api_olap:
+    container_name: api_olap
+    build:
+      context: ../backend/apiClickHouse
+    env_file:
+      - ../backend/apiClickHouse/environnements/.env
+    volumes:
+      - ../backend/apiClickHouse:/usr/src/app
+    ports:
+      - 3002:3002
+    depends_on:
+      - clickhouse
+    networks:
+      - reaseau_projet
+    command: [ "sh", "./install.sh", "bdd_olap" ]
 
   # Pour créer un network : docker network create "nom_du_reseau"
 networks:
@@ -47,6 +73,5 @@ networks:
     external: true
 
 volumes:
-  mysql_data:
-    #   postgres_data:
-    #   clickhouse_data:
+  postgres_data:
+  clickhouse_data:
