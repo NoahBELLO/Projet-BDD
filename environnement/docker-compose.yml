@@ -34,6 +34,20 @@ services:
     networks:
       - reaseau_projet
 
+  api_gateway:
+    container_name: api_gateway
+    build:
+      context: ../backend/apiGateway
+    env_file:
+      - ../backend/apiGateway/environnements/.env
+    volumes:
+      - ../backend/apiGateway:/usr/src/app
+    ports:
+      - 3001:3001
+    networks:
+      - reaseau_projet
+    command: [ "sh", "./install.sh" ] 
+
   api_oltp:
     container_name: api_oltp
     build:
@@ -43,7 +57,7 @@ services:
     volumes:
       - ../backend/apiPostgreSql:/usr/src/app
     ports:
-      - 3001:3001
+      - 3002:3002
     depends_on:
       - postgresql
     networks:
@@ -59,7 +73,7 @@ services:
     volumes:
       - ../backend/apiClickHouse:/usr/src/app
     ports:
-      - 3002:3002
+      - 3003:3003
     depends_on:
       - clickhouse
     networks:

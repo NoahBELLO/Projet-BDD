@@ -1,5 +1,8 @@
-environnement/.env
+# Fichier ignorée par git
 backend/apiPostgreSql/node_modules/
 backend/apiPostgreSql/environnements/.env
 backend/apiClickHouse/node_modules/
 backend/apiClickHouse/environnements/.env
+backend/apiGateway/node_modules/
+backend/apiGateway/environnements/.env
+environnement/.env
