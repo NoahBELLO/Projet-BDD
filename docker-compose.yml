@@ -7,28 +7,28 @@ services:
   api_olap:
     container_name: api_olap
     build:
-      context: ./backend/src/api_olap
+      context: ./backend
     env_file:
-      - ./backend/src/api_olap/.env
+      - backend\api_olap\.env
     volumes:
-      - ./backend/src/api_olap:/usr/src/app
+      - ./backend:/usr/src/app
     ports:
-      - 3000:5000
-    # depends_on:
-    #   - db
-    # networks:
-    #   - microservice
-    # command: [ "sh", "./start.sh", "db_user-service" ]
-  api_oltp:
-    container_name: api_oltp
-    build:
-      context: ./backend/src/api_oltp
-    env_file:
-      - ./backend/src/api_oltp/.env
-    volumes:
-      - ./backend/src/api_oltp:/usr/src/app
-    ports:
-      - 3001:3001
+      - "3000:5000"
+    depends_on:
+      - clickhouse
+    networks:
+      - reseau_projet
+
+  # api_oltp:
+  #   container_name: api_oltp
+  #   build:
+  #     context: ./backend/api_oltp
+  #   env_file:
+  #     - ./backend/src/api_oltp/.env
+  #   volumes:
+  #     - ./backend/src/api_oltp:/usr/src/app
+  #   ports:
+  #     - 3001:3001
     # depends_on:
     #   - db
     # networks:
@@ -53,17 +53,16 @@ services:
     container_name: clickhouse_container
     image: clickhouse/clickhouse-server:latest
     environment:
-      CLICKHOUSE_USER: default
+      CLICKHOUSE_USER: dev
       CLICKHOUSE_PASSWORD: root
       CLICKHOUSE_DB: florian_db
     ports:
-      - "8123:8123"  # HTTP Interface
-      - "9000:9000"  # Native Interface
+      - "8123:8123"
+      - "9000:9000"
     networks:
       - reseau_projet
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
     restart: unless-stopped
+
   # Pour créer un network : docker network create "nom_du_reseau"
 networks:
   reseau_projet:
