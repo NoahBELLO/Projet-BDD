@@ -1,14 +1,12 @@
-FROM node:alpine
+FROM python:3.10-slim
 
 WORKDIR /usr/src/app
 
-EXPOSE 3000
-
-COPY package*.json ./
-
 COPY . .
 
-RUN npm i
-RUN npm install -g nodemon
 
-ENTRYPOINT [ "nodemon", "./src/app.ts" ]
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
