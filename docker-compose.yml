@@ -1,7 +1,7 @@
 # docker-compose up --build
 #l'installation de flask et mysql:
 #pip install flask flask-mysql mysql-connector-python python-dotenv
-version: '3'
+
 
 services:
   api_olap:
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./backend/src/api_olap:/usr/src/app
     ports:
-      - 3000:3000
+      - 3000:5000
     # depends_on:
     #   - db
     # networks:
@@ -48,33 +48,30 @@ services:
     #   volumes:
     #     - mysql_data:/var/lib/mysql
 
-    # postgresql:
-    #   container_name: postgres_container
-    #   image: postgres:17
-    #   environment:
-    #     POSTGRES_USER: my_user
-    #     POSTGRES_PASSWORD: my_password
-    #     POSTGRES_DB: my_database
-    #   ports:
-    #     - "5432:5432"
-    #   volumes:
-    #     - postgres_data:/var/lib/postgresql/data
+  # Clickhouse (déjà configuré)
+  clickhouse:
+    container_name: clickhouse_container
+    image: clickhouse/clickhouse-server:latest
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: root
+      CLICKHOUSE_DB: florian_db
+    ports:
+      - "8123:8123"  # HTTP Interface
+      - "9000:9000"  # Native Interface
+    networks:
+      - reseau_projet
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    restart: unless-stopped
+  # Pour créer un network : docker network create "nom_du_reseau"
+networks:
+  reseau_projet:
+    driver: bridge
+    external: true
+volumes:
+  mysql_data:
+  clickhouse_data:
 
-    # clickhouse:
-    #   container_name: clickhouse_container
-    #   image: clickhouse/clickhouse-server:23.8
-    #   ports:
-    #     - "8123:8123"
-    #     - "9000:9000"
-    #   volumes:
-    #     - clickhouse_data:/var/lib/clickhouse
-
-    # networks:
-    #   microservice:
-    #     driver: bridge
-    #     external: true
-
-    # volumes:
-    #   mysql_data:
-    #   postgres_data:
-    #   clickhouse_data:
+  # mysql_data: # Décommente si MySQL est activé
+  # postgres_data: # Décommente si PostgreSQL est activé
