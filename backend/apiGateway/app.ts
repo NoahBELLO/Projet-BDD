@@ -1,7 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { ClickHouseRoutes, PostgreSqlRoutes } from "./route/routes";
 import 'dotenv/config';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -14,14 +13,11 @@ app.use(express.json());
 
 const corsOptions = {
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-
-// ClickHouseRoutes(app);
-// PostgreSqlRoutes(app);
 
 // Configurations des proxy pour rediriger les requêtes vers les API en fonction du chemin
 app.use('/oltp', createProxyMiddleware({
@@ -33,13 +29,13 @@ app.use('/oltp', createProxyMiddleware({
   }
 }));
 
+app.get('/', (req: Request, res: Response): void => { res.send('API Gateway') });
+
 app.use('/olap', createProxyMiddleware({
-  target: 'http://api_olap:3003', // URL de l'API de ClickHouse
+  target: 'http://api_olap:3003',
   changeOrigin: true,
   logger: console,
-  pathRewrite: (path, req) => {
-    return path.replace(/^\/olap/, '');
-  }
+  pathRewrite: (path, req) => path.replace(/^\/olap/, ''),
 }));
 
 // Middleware pour gérer les erreurs 500 (erreurs serveur)
@@ -50,7 +46,6 @@ app.use(
   }
 );
 
-// app.get('/', (req: Request, res: Response) => res.send('Gateway API'));
 
 // Démarrer le serveur
 app.listen(port, (): void => {

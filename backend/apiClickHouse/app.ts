@@ -9,9 +9,11 @@ dotenv.config();
 const app: Application = express();
 const port: number = parseInt(process.env.Api_Port as string);
 
+console.log('PORT API ClickHouse :', process.env.Api_Port);
 const controllers: Controllers = new Controllers();
 app.use(express.json());
 
+app.get('/', (req: Request, res: Response): void => { res.send('ClickHouse API 1') });
 app.use("/apiClickHouse", Routes);
 
 // Middleware pour gérer les erreurs 500 (erreurs serveur)

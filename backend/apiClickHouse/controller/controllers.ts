@@ -7,13 +7,15 @@ class Controller {
             const { item_id, limit } = req.query;
 
             const query = `
-                SELECT achat.item_id AS item_id
+                SELECT achat.item_id AS item_id, 
+                COUNT(item_id) AS nombreDeFoisItemVu 
                 FROM train_sessions AS sessions 
-                INNER JOIN train_purchases AS achat 
-                ON sessions.session_id = achat.session_id 
-                WHERE sessions.item_id = {item_id: UInt32} 
+                INNER JOIN train_purchases AS achat ON sessions.session_id = achat.session_id 
+                WHERE sessions.item_id = {item_id: UInt32}
+                GROUP BY item_id
+                ORDER BY nombreDeFoisItemVu DESC, item_id ASC
                 LIMIT {limit: UInt32}
-            `;
+            `;// mettre le order by en fonction du nombre de fois l'item apparait (count de l'item_id en fonction de la session_id)
 
             const results = await client.query({
                 query,

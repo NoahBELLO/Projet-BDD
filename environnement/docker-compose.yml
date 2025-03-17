@@ -44,6 +44,9 @@ services:
       - ../backend/apiGateway:/usr/src/app
     ports:
       - 3001:3001
+    depends_on:
+      - api_oltp
+      - api_olap
     networks:
       - reaseau_projet
     command: [ "sh", "./install.sh" ] 
@@ -79,7 +82,15 @@ services:
     networks:
       - reaseau_projet
     command: [ "sh", "./install.sh", "bdd_olap" ]
-
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx-container
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - ./conf.d:/etc/nginx/conf.d
+  #   networks:
+  #     - reaseau_projet
   # Pour créer un network : docker network create "nom_du_reseau"
 networks:
   reaseau_projet:
