@@ -55,9 +55,9 @@ services:
     container_name: clickhouse_container
     image: clickhouse/clickhouse-server:latest
     environment:
-      CLICKHOUSE_USER: dev
+      CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: root
-      CLICKHOUSE_DB: florian_db
+      CLICKHOUSE_DB: default
     ports:
       - "8123:8123"
       - "9000:9000"
