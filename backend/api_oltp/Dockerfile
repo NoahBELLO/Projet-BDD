@@ -2,6 +2,10 @@ FROM python:3.10-slim
 
 WORKDIR /usr/src/app
 
+EXPOSE 3001
+
+COPY package*.json ./
+
 COPY . .
 
 

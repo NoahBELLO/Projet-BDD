@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Controller from "./controllers";
+import Controller from "../controllers/api_oltp.controller";
 const router: Router = Router();
 const controller: Controller = new Controller();
 
