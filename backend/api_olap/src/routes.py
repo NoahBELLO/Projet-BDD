@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from src.models.model import TableTrain
+from src.model import TableTrain
 import os, json
 from loguru import logger
 

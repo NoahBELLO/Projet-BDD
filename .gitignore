@@ -5,3 +5,4 @@ backend/apiPostgreSql/
 backend/api_olap/src/models/__pycache__/
 backend/api_olap/src/routes/__pycache__/
 backend/api_olap/tools/__pycache__/
+node_modules/

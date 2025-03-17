@@ -8,6 +8,8 @@ services:
     container_name: api_olap
     build:
       context: ./backend/api_olap
+    environment:
+      - PYTHONPATH=/usr/src/app
     env_file:
       - ./backend/api_olap/.env
     volumes:

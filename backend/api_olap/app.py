@@ -1,7 +1,7 @@
 from flask import Flask
 from dotenv import load_dotenv
 import os
-from src.models.model import TableTrain
+from src.model import TableTrain
 import src.routes
 from loguru import logger
 
