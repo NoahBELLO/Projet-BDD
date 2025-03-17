@@ -7,11 +7,11 @@ services:
   api_olap:
     container_name: api_olap
     build:
-      context: ./backend
+      context: ./backend/api_olap
     env_file:
-      - backend\api_olap\.env
+      - ./backend/api_olap/.env
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend/api_olap:/usr/src/app
     ports:
       - "3000:5000"
     depends_on:
