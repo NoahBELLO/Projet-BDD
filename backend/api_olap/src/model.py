@@ -22,13 +22,15 @@ class TableTrain(ClickHouseDB):
 
         query = (
             f"SELECT {_table_train_purchases}.item_id "
+            f"COUNT {_table_train_purchases}.item_id AS nombreDeFoisItemVu"
             f"FROM {_table_train_session} "
             f"INNER JOIN {_table_train_purchases} "
             f"ON {_table_train_session}.session_id = {_table_train_purchases}.session_id "
             f"WHERE {_table_train_session}.item_id = {int(item_id)} "
+            f"GROUP BY {_table_train_purchases}.item_id "
+            f"ORDER BY nombreDeFoisItemVu DESC, {_table_train_purchases}.item_id ASC"
             f"LIMIT {int(limit)}"
         )
-
 
         logger.critical(f"🔍 Requête envoyée à ClickHouse : {query}")
         logger.critical(query)
