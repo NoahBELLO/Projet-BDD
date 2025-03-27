@@ -1,20 +1,19 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import Routes from "./routes/api_oltp.route";
-import Controllers from "./controllers/api_oltp.controller";
+import Routes from "./route/routes";
+import Controllers from "./controller/controllers";
 import 'dotenv/config';
-// import { db } from './databases';
 
 dotenv.config();
+
 const app: Application = express();
-const port: number = 3000;
+const port: number = parseInt(process.env.Api_Port as string);
 
 const controllers: Controllers = new Controllers();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true })); // permet d'utiliser le format x-www-form-urlencoded
 
-// db()
-app.use("/api", Routes);
+app.use("/apiPostgreSql", Routes);
 
 // Middleware pour gérer les erreurs 500 (erreurs serveur)
 app.use(
@@ -26,5 +25,6 @@ app.use(
 
 // Démarrer le serveur
 app.listen(port, (): void => {
-  console.log(`API en cours d'exécution sur http://localhost:${port}`);
+  console.log(`API en cours d'exécution sur http://localhost:${port} (pour tester avec Postman)`);
+  console.log(`API en cours d'exécution sur http://api_oltp:${port} (pour utilisation dans le network Docker)`);
 });

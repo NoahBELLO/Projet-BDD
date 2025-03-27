@@ -1,8 +1,7 @@
-environnement/
+# Fichier ignorée par git
+environnement/.env
+environnement/conf.d/default.conf
+backend/apiPostgreSql/environnements/.env
+backend/apiPostgreSql/node_modules/
 backend/apiClickHouse/
 backend/apiGateway/
-backend/apiPostgreSql/
-backend/api_olap/src/models/__pycache__/
-backend/api_olap/src/routes/__pycache__/
-backend/api_olap/tools/__pycache__/
-node_modules/
