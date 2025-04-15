@@ -1,0 +1,8 @@
+<div>
+    <h2>Formulaire {{data}}</h2>
+    <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+        <input type="number" name="item_id" ngModel required>
+        <input type="number" name="limit" min="1" max="10" ngModel required>
+        <button type="submit">Récupérer informations</button>
+    </form>
+</div>

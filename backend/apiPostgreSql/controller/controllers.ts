@@ -5,8 +5,7 @@ class Controller {
     async getRecommandation(req: Request, res: Response): Promise<void> {
         try {
             const { item_id, limit } = req.query;
-            console.log('item_id:', item_id);
-            console.log('limit:', limit);
+
             const results = await client.query(
                 `SELECT achat.item_id AS item, 
                 COUNT(achat.item_id) AS nombreDeFoisItemVu 
@@ -18,7 +17,6 @@ class Controller {
                 LIMIT $2`,
                 [item_id, limit]
             );
-            console.log(results.rows);
 
             const achatsList = results.rows;
 
